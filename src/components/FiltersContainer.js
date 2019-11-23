@@ -6,7 +6,7 @@ const axiosSWAPIGraphQL = axios.create({
   baseURL: "https://api.graph.cool/simple/v1/swapi"
 });
 
-const GET_INITAL_DATA = `
+const GET_INITIAL_DATA = `
 {
     allFilms {
         title
@@ -24,11 +24,12 @@ export default class FiltersContainer extends Component {
   state = {
     films: null,
     species: null,
-    planets: null
+    planets: null,
+    currFilm: null
   };
 
   componentDidMount() {
-    this.onFetchFromSWAPI();
+    this.handleInitialFetch();
   }
 
   extractStrings = input => {
@@ -38,14 +39,14 @@ export default class FiltersContainer extends Component {
   populateFilter = input => {
     if (input) {
       return input.map((element, index) => (
-        <option key={index}>{element}</option>
+        <option key={index} value={element}>{element}</option>
       ));
     }
   };
 
-  onFetchFromSWAPI = () => {
+  handleInitialFetch = () => {
     axiosSWAPIGraphQL
-      .post("", { query: GET_INITAL_DATA })
+      .post("", { query: GET_INITIAL_DATA })
       .then(response => {
         this.setState({
           films: this.extractStrings(response.data.data.allFilms),
@@ -57,19 +58,49 @@ export default class FiltersContainer extends Component {
       .catch(error => console.log(error));
   };
 
+  handleFilterByFilm = () => {
+    this.logOption();
+    axiosSWAPIGraphQL
+      .post("", {
+        query: `
+      {
+          Film(title: "${this.state.currFilm}") {
+            species {
+              name
+            }
+            planets {
+              name
+            }
+          }
+        }
+      `
+      })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  };
+
+  logOption = () => {
+    this.setState(
+      {
+        currFilm: this.refs.films.value
+      },
+      () => console.log(this.state.currFilm)
+    );
+  };
+
   render() {
     return (
       <div className="filters-container">
-        <select name="films" id="films">
-          <option>Choose a film...</option>
+        <select defaultValue="choose-film" ref="films" name="films" id="films" onChange={this.handleFilterByFilm}>
+          <option disabled value="choose-film">---Choose a film---</option>
           {this.populateFilter(this.state.films)}
         </select>
-        <select name="species" id="species">
-          <option>Choose a species...</option>
+        <select defaultValue="choose-species" name="species" id="species">
+          <option disabled value="choose-species">---Choose a species---</option>
           {this.populateFilter(this.state.species)}
         </select>
-        <select name="planets" id="planets">
-          <option>Choose a planet...</option>
+        <select defaultValue="choose-planet" name="planets" id="planets">
+          <option disabled value="choose-planet">---Choose a planet---</option>
           {this.populateFilter(this.state.planets)}
         </select>
       </div>
