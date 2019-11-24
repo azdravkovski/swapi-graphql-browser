@@ -59,7 +59,6 @@ export default class FiltersContainer extends Component {
   };
 
   handleFilterByFilm = () => {
-    this.logOption();
     axiosSWAPIGraphQL
       .post("", {
         query: `
@@ -75,7 +74,12 @@ export default class FiltersContainer extends Component {
         }
       `
       })
-      .then(response => console.log(response))
+      .then(response => {
+        this.setState({
+          species: this.extractStrings(response.data.data.Film.species),
+          planets: this.extractStrings(response.data.data.Film.planets)
+        })
+      })
       .catch(error => console.log(error));
   };
 
@@ -84,14 +88,14 @@ export default class FiltersContainer extends Component {
       {
         currFilm: this.refs.films.value
       },
-      () => console.log(this.state.currFilm)
+      () => this.handleFilterByFilm()
     );
   };
 
   render() {
     return (
       <div className="filters-container">
-        <select defaultValue="choose-film" ref="films" name="films" id="films" onChange={this.handleFilterByFilm}>
+        <select defaultValue="choose-film" ref="films" name="films" id="films" onChange={this.logOption}>
           <option disabled value="choose-film">---Choose a film---</option>
           {this.populateFilter(this.state.films)}
         </select>
