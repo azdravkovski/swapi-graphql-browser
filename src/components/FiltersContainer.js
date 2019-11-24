@@ -20,6 +20,7 @@ const GET_INITIAL_DATA = `
   }
 `;
 
+
 export default class FiltersContainer extends Component {
   state = {
     films: null,
@@ -34,7 +35,7 @@ export default class FiltersContainer extends Component {
 
   extractStrings = input => {
     return input.map(element => Object.values(element)).flat();
-  };
+  }
 
   populateFilter = input => {
     if (input) {
@@ -42,7 +43,7 @@ export default class FiltersContainer extends Component {
         <option key={index} value={element}>{element}</option>
       ));
     }
-  };
+  }
 
   handleInitialFetch = () => {
     axiosSWAPIGraphQL
@@ -56,7 +57,7 @@ export default class FiltersContainer extends Component {
         console.log(this.state);
       })
       .catch(error => console.log(error));
-  };
+  }
 
   handleFilterByFilm = () => {
     axiosSWAPIGraphQL
@@ -81,21 +82,21 @@ export default class FiltersContainer extends Component {
         })
       })
       .catch(error => console.log(error));
-  };
+  }
 
-  logOption = () => {
+  filterByFilm = () => {
     this.setState(
       {
         currFilm: this.refs.films.value
       },
       () => this.handleFilterByFilm()
     );
-  };
+  }
 
   render() {
     return (
       <div className="filters-container">
-        <select defaultValue="choose-film" ref="films" name="films" id="films" onChange={this.logOption}>
+        <select defaultValue="choose-film" ref="films" name="films" id="films" onChange={this.filterByFilm}>
           <option disabled value="choose-film">---Choose a film---</option>
           {this.populateFilter(this.state.films)}
         </select>

@@ -1,0 +1,13 @@
+.persons-container {
+  border: 1px solid blue;
+  padding: 10px;
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.persons-container .person {
+  border: 1px solid red;
+  margin: 10px;
+}

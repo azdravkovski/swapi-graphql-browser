@@ -1,5 +1,6 @@
 import React from 'react';
 import FiltersContainer from './components/FiltersContainer';
+import PersonsContainer from './components/PersonsContainer';
 import './App.css';
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <div className="App">
       <h1>Star Wars Browser</h1>
       <FiltersContainer />
+      <PersonsContainer />
     </div>
   );
 }
