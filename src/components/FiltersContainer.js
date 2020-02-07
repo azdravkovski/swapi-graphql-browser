@@ -49,12 +49,12 @@ export default class FiltersContainer extends Component {
     axiosSWAPIGraphQL
       .post("", { query: GET_INITIAL_DATA })
       .then(response => {
+        let {allFilms, allSpecies, allPlanets} = response.data.data;
         this.setState({
-          films: this.extractStrings(response.data.data.allFilms),
-          species: this.extractStrings(response.data.data.allSpecies),
-          planets: this.extractStrings(response.data.data.allPlanets)
+          films: this.extractStrings(allFilms),
+          species: this.extractStrings(allSpecies),
+          planets: this.extractStrings(allPlanets)
         });
-        console.log(this.state);
       })
       .catch(error => console.log(error));
   }
@@ -76,9 +76,10 @@ export default class FiltersContainer extends Component {
       `
       })
       .then(response => {
+        let {species, planets} = response.data.data.Film;
         this.setState({
-          species: this.extractStrings(response.data.data.Film.species),
-          planets: this.extractStrings(response.data.data.Film.planets)
+          species: this.extractStrings(species),
+          planets: this.extractStrings(planets)
         })
       })
       .catch(error => console.log(error));
@@ -94,19 +95,20 @@ export default class FiltersContainer extends Component {
   }
 
   render() {
+    let {films, species, planets} = this.state;
     return (
       <div className="filters-container">
         <select defaultValue="choose-film" ref="films" name="films" id="films" onChange={this.filterByFilm}>
           <option disabled value="choose-film">---Choose a film---</option>
-          {this.populateFilter(this.state.films)}
+          {this.populateFilter(films)}
         </select>
         <select defaultValue="choose-species" name="species" id="species">
           <option disabled value="choose-species">---Choose a species---</option>
-          {this.populateFilter(this.state.species)}
+          {this.populateFilter(species)}
         </select>
         <select defaultValue="choose-planet" name="planets" id="planets">
           <option disabled value="choose-planet">---Choose a planet---</option>
-          {this.populateFilter(this.state.planets)}
+          {this.populateFilter(planets)}
         </select>
       </div>
     );

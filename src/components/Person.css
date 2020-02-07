@@ -1,0 +1,6 @@
+.person {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid blue;
+  margin: 10px;
+}

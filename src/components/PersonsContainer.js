@@ -12,14 +12,6 @@ export default class PersonsContainer extends Component {
     persons: null
   };
 
-  componentDidMount() {
-    if (this.state.persons) this.handlePersonsFetch();
-  }
-
-  componentDidUpdate() {
-    console.log(this.state.persons);
-  }
-
   handlePersonsFetch = () => {
     axiosPersons
       .get("")
@@ -27,7 +19,7 @@ export default class PersonsContainer extends Component {
         let { allPersons } = response.data.data;
         this.setState({
           persons: allPersons
-        });
+        }, () => console.log(this.state.persons));
       })
       .catch(error => console.log(error));
   };
