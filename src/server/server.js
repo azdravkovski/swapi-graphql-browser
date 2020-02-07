@@ -47,9 +47,8 @@ function fetchPersons() {
     .post("", { query: GET_PERSONS_DATA })
     .then(result => {
       body = result.data;
-      console.log(body);
     })
-    .catch(error => console.log(error));
+    .catch(error => console.error(error));
 }
 
 fetchPersons();

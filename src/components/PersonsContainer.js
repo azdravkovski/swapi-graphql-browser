@@ -13,7 +13,7 @@ export default class PersonsContainer extends Component {
   };
 
   componentDidMount() {
-    this.handlePersonsFetch();
+    if (this.state.persons) this.handlePersonsFetch();
   }
 
   componentDidUpdate() {
@@ -33,17 +33,19 @@ export default class PersonsContainer extends Component {
   };
 
   renderPersons() {
-    let persons = this.state.persons.map(person => (
-      <Person
+    let persons = this.state.persons.map(person => {
+      return (
+        <Person
         name={person.name}
         planet={person.homeworld}
         species={person.species[0].name}
       />
-    ));
+      )
+    });
     return persons;
   }
 
   render() {
-    return <div className="persons-container">{this.renderPersons()}</div>;
+    return <div className="persons-container">{this.state.persons ? this.renderPersons() : "Waiting"}</div>;
   }
 }
