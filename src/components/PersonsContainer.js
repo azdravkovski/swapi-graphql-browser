@@ -12,6 +12,10 @@ export default class PersonsContainer extends Component {
     persons: null
   };
 
+  componentDidMount() {
+    this.handlePersonsFetch();
+  }
+
   handlePersonsFetch = () => {
     axiosPersons
       .get("")
@@ -19,25 +23,34 @@ export default class PersonsContainer extends Component {
         let { allPersons } = response.data.data;
         this.setState({
           persons: allPersons
-        }, () => console.log(this.state.persons));
+        });
       })
       .catch(error => console.log(error));
   };
 
   renderPersons() {
-    let persons = this.state.persons.map(person => {
-      return (
-        <Person
-        name={person.name}
-        planet={person.homeworld}
-        species={person.species[0].name}
-      />
-      )
+    let persons = this.state.persons.map((person, i) => {
+      for (const film of person.films) {
+        if (film.title === this.props.currentFilm) {
+          return (
+            <Person
+              key={i}
+              name={person.name}
+              planet={person.homeworld && person.homeworld.name}
+              species={person.species[0] && person.species[0].name}
+            />
+          );
+        }
+      }
     });
     return persons;
   }
 
   render() {
-    return <div className="persons-container">{this.state.persons ? this.renderPersons() : "Waiting"}</div>;
+    return (
+      <div className="persons-container">
+        {this.state.persons === null ? "Waiting..." : this.renderPersons()}
+      </div>
+    );
   }
 }

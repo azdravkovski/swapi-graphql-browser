@@ -30,6 +30,7 @@ const axiosSWAPIGraphQL = axios.create({
 const GET_PERSONS_DATA = `
 {
   allPersons {
+    id
     name
     homeworld {
       name
@@ -50,7 +51,6 @@ function fetchPersons() {
     .post("", { query: GET_PERSONS_DATA })
     .then(result => {
       body = result.data;
-      console.log(body);
     })
     .catch(error => console.error(error));
 }
