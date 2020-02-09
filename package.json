@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node src/server/server.js",
+    "server": "nodemon src/server/server.js",
     "dev:start": "concurrently --kill-others \"npm start\" \"npm run server\""
   },
   "eslintConfig": {

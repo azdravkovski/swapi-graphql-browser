@@ -22,8 +22,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-
-const axiosSWAPIGraphQL = axios.create({
+const SWAPIGraphQL = axios.create({
   baseURL: "https://api.graph.cool/simple/v1/swapi"
 });
 
@@ -44,19 +43,38 @@ const GET_PERSONS_DATA = `
   }
 }
 `;
+
+const extractImgIDFromURL = url => {
+  const parts = url.split("/");
+  return parts[parts.length - 2];
+};
+
+const fetchIDFromPerson = name => {
+  axios
+    .get(`https://swapi.co/api/people/?search=${name}&format=json`)
+    .then(response => extractImgIDFromURL(response.data.results[0].url))
+    .catch(error => console.error(error));
+};
+
 let body;
 
-function fetchPersons() {
-  axiosSWAPIGraphQL
-    .post("", { query: GET_PERSONS_DATA })
+const fetchPersons = (query, imgID) => {
+  SWAPIGraphQL.post("", { query })
     .then(result => {
-      body = result.data;
+      const { allPersons } = result.data.data;
+      return (body = allPersons.map(person => {
+        const ID = fetchIDFromPerson(person.name);
+        console.log(ID);
+        return {
+          ...person,
+          imgID: ID
+        };
+      }));
     })
     .catch(error => console.error(error));
-}
+};
 
-fetchPersons();
-
+fetchPersons(GET_PERSONS_DATA);
 
 app.get("/persons", (req, res) => res.send(body));
 

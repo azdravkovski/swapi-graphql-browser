@@ -20,9 +20,9 @@ export default class PersonsContainer extends Component {
     axiosPersons
       .get("")
       .then(response => {
-        let { allPersons } = response.data.data;
+        console.log(response.data);
         this.setState({
-          persons: allPersons
+          persons: response.data
         });
       })
       .catch(error => console.log(error));
@@ -30,7 +30,7 @@ export default class PersonsContainer extends Component {
 
   renderPersons() {
     let persons = this.state.persons.map((person, i) => {
-      console.log(i+1, person.name);
+      // console.log(i+1, person.name);
       for (const film of person.films) {
         if (film.title === this.props.currentFilm) {
           return (
@@ -39,7 +39,7 @@ export default class PersonsContainer extends Component {
               name={person.name}
               planet={person.homeworld && person.homeworld.name}
               species={person.species[0] && person.species[0].name}
-              imageURL={`https://starwars-visualguide.com/assets/img/characters/${i+1}.jpg`}
+              imageURL={`https://starwars-visualguide.com/assets/img/characters/${person.imgID}.jpg`}
             />
           );
         }
