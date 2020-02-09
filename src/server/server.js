@@ -50,32 +50,47 @@ const extractImgIDFromURL = url => {
 };
 
 const fetchIDFromPerson = name => {
-  axios
+  return axios
     .get(`https://swapi.co/api/people/?search=${name}&format=json`)
-    .then(response => extractImgIDFromURL(response.data.results[0].url))
-    .catch(error => console.error(error));
+    .then(response => {
+      if (response.data.results[0] && response.data.results[0].url) {
+        return extractImgIDFromURL(response.data.results[0].url);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
 };
 
-let body;
-
-const fetchPersons = (query, imgID) => {
-  SWAPIGraphQL.post("", { query })
+const fetchPersons = query => {
+  return SWAPIGraphQL.post("", { query })
     .then(result => {
       const { allPersons } = result.data.data;
-      return (body = allPersons.map(person => {
-        const ID = fetchIDFromPerson(person.name);
-        console.log(ID);
-        return {
-          ...person,
-          imgID: ID
-        };
-      }));
+      return Promise.all(
+        allPersons.map(person => {
+          return fetchIDFromPerson(person.name).then(ID => {
+            return {
+              ...person,
+              imageID: ID
+            };
+          });
+        })
+      );
     })
-    .catch(error => console.error(error));
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
 };
 
-fetchPersons(GET_PERSONS_DATA);
-
-app.get("/persons", (req, res) => res.send(body));
+fetchPersons(GET_PERSONS_DATA)
+  .then(results => results)
+  .then(data => {
+    app.get("/persons", (req, res) => res.send(data));
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
