@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./FiltersContainer.css";
+import "./MainContainer.css";
 import axios from "axios";
 import PersonsContainer from "./PersonsContainer";
 
@@ -21,7 +21,7 @@ const GET_INITIAL_DATA = `
   }
 `;
 
-export default class FiltersContainer extends Component {
+export default class MainContainer extends Component {
   state = {
     films: null,
     species: null,
@@ -113,13 +113,23 @@ export default class FiltersContainer extends Component {
             </option>
             {this.populateFilter(films)}
           </select>
-          <select defaultValue="choose-species" name="species" id="species">
+          <select
+            defaultValue="choose-species"
+            name="species"
+            id="species"
+            onChange={this.filterSelection}
+          >
             <option disabled value="choose-species">
               ---Choose a species---
             </option>
             {this.populateFilter(species)}
           </select>
-          <select defaultValue="choose-planet" name="planets" id="planets">
+          <select
+            defaultValue="choose-planet"
+            name="planets"
+            id="planets"
+            onChange={this.filterSelection}
+          >
             <option disabled value="choose-planet">
               ---Choose a planet---
             </option>

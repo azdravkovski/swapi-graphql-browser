@@ -20,7 +20,6 @@ export default class PersonsContainer extends Component {
     axiosPersons
       .get("")
       .then(response => {
-        console.log(response.data);
         this.setState({
           persons: response.data
         });
@@ -29,7 +28,7 @@ export default class PersonsContainer extends Component {
   };
 
   renderPersons() {
-    let persons = this.state.persons.map((person, i) => {
+    let persons = this.state.persons.map(person => {
       for (const film of person.films) {
         if (film.title === this.props.currentFilm) {
           return (
