@@ -30,14 +30,16 @@ export default class PersonsContainer extends Component {
 
   renderPersons() {
     let persons = this.state.persons.map((person, i) => {
+      console.log(i+1, person.name);
       for (const film of person.films) {
         if (film.title === this.props.currentFilm) {
           return (
             <Person
-              key={i}
+              key={person.id}
               name={person.name}
               planet={person.homeworld && person.homeworld.name}
               species={person.species[0] && person.species[0].name}
+              imageURL={`https://starwars-visualguide.com/assets/img/characters/${i+1}.jpg`}
             />
           );
         }

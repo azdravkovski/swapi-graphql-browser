@@ -99,7 +99,7 @@ export default class FiltersContainer extends Component {
   render() {
     let { films, species, planets, currentFilm } = this.state;
     return (
-      <div>
+      <div className="main-container">
         <div className="filters-container">
           <select
             defaultValue="choose-film"
