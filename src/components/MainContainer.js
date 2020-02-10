@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./MainContainer.css";
 import axios from "axios";
 import PersonsContainer from "./PersonsContainer";
+import { extractStrings, populateFilter } from "../common/dataUtils";
 
 const axiosSWAPIGraphQL = axios.create({
   baseURL: "https://api.graph.cool/simple/v1/swapi"
@@ -26,26 +27,15 @@ export default class MainContainer extends Component {
     films: null,
     species: null,
     planets: null,
-    currentFilm: null
+    currentFilm: null,
+    currentSpecies: null,
+    currentPlanet: null
   };
 
   componentDidMount() {
     this.handleInitialFetch();
   }
 
-  extractStrings = input => {
-    return input.map(element => Object.values(element)).flat();
-  };
-
-  populateFilter = input => {
-    if (input) {
-      return input.map((element, index) => (
-        <option key={index} value={element}>
-          {element}
-        </option>
-      ));
-    }
-  };
 
   handleInitialFetch = () => {
     axiosSWAPIGraphQL
@@ -53,9 +43,9 @@ export default class MainContainer extends Component {
       .then(response => {
         let { allFilms, allSpecies, allPlanets } = response.data.data;
         this.setState({
-          films: this.extractStrings(allFilms),
-          species: this.extractStrings(allSpecies),
-          planets: this.extractStrings(allPlanets)
+          films: extractStrings(allFilms),
+          species: extractStrings(allSpecies),
+          planets: extractStrings(allPlanets)
         });
       })
       .catch(error => console.log(error));
@@ -80,63 +70,64 @@ export default class MainContainer extends Component {
       .then(response => {
         let { species, planets } = response.data.data.Film;
         this.setState({
-          species: this.extractStrings(species),
-          planets: this.extractStrings(planets)
+          species: extractStrings(species),
+          planets: extractStrings(planets)
         });
       })
       .catch(error => console.log(error));
   };
 
-  filterByFilm = () => {
+  handleChange = (field, event) => {
     this.setState(
       {
-        currentFilm: this.refs.films.value
+        [field]: event.target.value
       },
-      () => this.handleFilterByFilm()
+      () => {
+        console.log(this.state);
+        this.handleFilterByFilm()}
     );
   };
 
   render() {
-    let { films, species, planets, currentFilm } = this.state;
+    let { films, species, planets, currentFilm, currentSpecies, currentPlanet } = this.state;
     return (
       <div className="main-container">
         <div className="filters-container">
           <select
             defaultValue="choose-film"
-            ref="films"
             name="films"
             id="films"
-            onChange={this.filterByFilm}
+            onChange={(e) => this.handleChange("currentFilm", e)}
           >
             <option disabled value="choose-film">
               ---Choose a film---
             </option>
-            {this.populateFilter(films)}
+            {populateFilter(films)}
           </select>
           <select
             defaultValue="choose-species"
             name="species"
             id="species"
-            onChange={this.filterSelection}
+            onChange={(e) => this.handleChange("currentSpecies", e)}
           >
             <option disabled value="choose-species">
               ---Choose a species---
             </option>
-            {this.populateFilter(species)}
+            {populateFilter(species)}
           </select>
           <select
             defaultValue="choose-planet"
             name="planets"
             id="planets"
-            onChange={this.filterSelection}
+            onChange={(e) => this.handleChange("currentPlanet", e)}
           >
             <option disabled value="choose-planet">
               ---Choose a planet---
             </option>
-            {this.populateFilter(planets)}
+            {populateFilter(planets)}
           </select>
         </div>
-        <PersonsContainer currentFilm={currentFilm} />
+        <PersonsContainer currentFilm={currentFilm} currentSpecies={currentSpecies} currentPlanet={currentPlanet} />
       </div>
     );
   }

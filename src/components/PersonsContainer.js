@@ -28,9 +28,10 @@ export default class PersonsContainer extends Component {
   };
 
   renderPersons() {
+    const { currentFilm, currentSpecies, currentPlanet } = this.props;
     let persons = this.state.persons.map(person => {
       for (const film of person.films) {
-        if (film.title === this.props.currentFilm) {
+        if (film.title === currentFilm) {
           return (
             <Person
               key={person.id}
