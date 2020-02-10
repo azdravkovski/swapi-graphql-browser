@@ -1,26 +1,8 @@
 import React, { Component } from "react";
 import "./MainContainer.css";
-import axios from "axios";
 import PersonsContainer from "./PersonsContainer";
 import { extractStrings, populateFilter } from "../common/dataUtils";
-
-const axiosSWAPIGraphQL = axios.create({
-  baseURL: "https://api.graph.cool/simple/v1/swapi"
-});
-
-const GET_INITIAL_DATA = `
-{
-    allFilms {
-        title
-      }
-    allSpecies {
-        name
-      }
-    allPlanets {
-        name
-    }
-  }
-`;
+import { axiosSWAPIGraphQL, GET_INITIAL_DATA } from "../common/apiUtils";
 
 export default class MainContainer extends Component {
   state = {
