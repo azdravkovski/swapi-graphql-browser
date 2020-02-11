@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./PersonsContainer.css";
 import Person from "./Person";
-
-const axiosPersons = axios.create({
-  baseURL: "http://localhost:3001/persons"
-});
+import {axiosPersons} from "../common/apiUtils";
 
 export default class PersonsContainer extends Component {
   state = {

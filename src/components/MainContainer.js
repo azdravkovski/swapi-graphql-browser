@@ -65,7 +65,6 @@ export default class MainContainer extends Component {
         [field]: event.target.value
       },
       () => {
-        console.log(this.state);
         this.handleFilterByFilm()}
     );
   };

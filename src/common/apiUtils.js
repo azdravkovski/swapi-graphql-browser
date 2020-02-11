@@ -18,4 +18,9 @@ const GET_INITIAL_DATA = `
   }
 `;
 
-export { axiosSWAPIGraphQL, GET_INITIAL_DATA };
+const axiosPersons = axios.create({
+  baseURL: "http://localhost:3001/persons"
+});
+
+
+export { axiosSWAPIGraphQL, GET_INITIAL_DATA, axiosPersons };
