@@ -44,11 +44,13 @@ const GET_PERSONS_DATA = `
 }
 `;
 
+//Extracts the number from the URL that designates the photo of the Star Wars person 
 const extractImgIDFromURL = url => {
     const parts = url.split("/");
     return parts[parts.length - 2];
 };
 
+//Returns the ID of a particular Star Wars person
 const fetchIDFromPerson = name => {
     return axios
         .get(`https://swapi.co/api/people/?search=${name}&format=json`)
@@ -63,6 +65,7 @@ const fetchIDFromPerson = name => {
         });
 };
 
+//Fetches all Star Wars persons and adds imageID data for constructing the src attribute in the avatar
 const fetchPersons = query => {
     return SWAPIGraphQL.post("", { query })
         .then(result => {

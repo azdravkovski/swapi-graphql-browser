@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./PersonsContainer.css";
-import Person from "./Person";
-import {axiosPersons} from "../common/apiUtils";
+import Person from "../Person/Person";
+import { axiosPersons } from "../../common/apiUtils";
 
 export default class PersonsContainer extends Component {
   state = {
@@ -12,6 +12,7 @@ export default class PersonsContainer extends Component {
     this.handlePersonsFetch();
   }
 
+  //Fetches the JSON data from the server and stores it in the state
   handlePersonsFetch = () => {
     axiosPersons
       .get("")
@@ -23,10 +24,11 @@ export default class PersonsContainer extends Component {
       .catch(error => console.log(error));
   };
 
+  //Renders the <Person /> components in the container based on current film title
   renderPersons() {
     const { currentFilm, currentSpecies, currentPlanet } = this.props;
     let persons = this.state.persons.map(person => {
-      for (const film of person.films) {
+      return person.films.map(film => {
         if (film.title === currentFilm) {
           return (
             <Person
@@ -38,7 +40,8 @@ export default class PersonsContainer extends Component {
             />
           );
         }
-      }
+      })
+
     });
     return persons;
   }

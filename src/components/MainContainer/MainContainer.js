@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "./MainContainer.css";
-import PersonsContainer from "./PersonsContainer";
-import { extractStrings, populateFilter } from "../common/dataUtils";
-import { axiosSWAPIGraphQL, GET_INITIAL_DATA } from "../common/apiUtils";
+import PersonsContainer from "../PersonsContainer/PersonsContainer";
+import { extractStrings, populateFilter } from "../../common/dataUtils";
+import { axiosSWAPIGraphQL, GET_INITIAL_DATA } from "../../common/apiUtils";
 
 export default class MainContainer extends Component {
   state = {
@@ -18,7 +18,7 @@ export default class MainContainer extends Component {
     this.handleInitialFetch();
   }
 
-
+  //Populate the dropdowns with all available films, species and planets
   handleInitialFetch = () => {
     axiosSWAPIGraphQL
       .post("", { query: GET_INITIAL_DATA })
@@ -33,6 +33,7 @@ export default class MainContainer extends Component {
       .catch(error => console.log(error));
   };
 
+  //Make call to SWAPI GraphQL API and retrieve data based on currently selected film
   handleFilterByFilm = () => {
     axiosSWAPIGraphQL
       .post("", {
@@ -59,6 +60,7 @@ export default class MainContainer extends Component {
       .catch(error => console.log(error));
   };
 
+  //Handler that sets current film, species and planet based on selected option in dropdown
   handleChange = (field, event) => {
     this.setState(
       {
